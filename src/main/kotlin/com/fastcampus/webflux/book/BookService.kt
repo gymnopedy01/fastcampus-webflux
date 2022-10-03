@@ -19,8 +19,6 @@ class BookService {
         Book(id = nextId.incrementAndGet(), name = "HTTP 완벽 가이드", price = 40000),
     )
 
-
-
     fun getAll(): Flux<Book> {
 //        return Flux.fromIterable(books)
         return books.toFlux();
@@ -30,16 +28,13 @@ class BookService {
 //        return Mono.justOrEmpty(books.find {
 //            it.id == id
 //        })
-        return books.find{it.id == id}.toMono()
+        return books.find { it.id == id }.toMono()
     }
 
     fun add(request: Map<String, Any>): Mono<Book> {
-        return Mono.just(request)
-            .map { map->
+        return Mono.just(request).map { map ->
                 val book = Book(
-                    id = nextId.incrementAndGet(),
-                    name = map["name"].toString(),
-                    price = map["price"] as Int
+                    id = nextId.incrementAndGet(), name = map["name"].toString(), price = map["price"] as Int
                 )
                 books.add(book)
                 book
@@ -47,9 +42,7 @@ class BookService {
     }
 
     fun delete(id: Int): Mono<Void> {
-        return Mono.justOrEmpty(books.find { it.id == id })
-            .map { books.remove(it) }
-            .then()
+        return Mono.justOrEmpty(books.find { it.id == id }).map { books.remove(it) }.then()
     }
 
 }
